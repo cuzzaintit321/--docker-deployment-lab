@@ -1,0 +1,6 @@
+CREATE TABLE IF NOT EXISTS checks (
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    title VARCHAR(160) NOT NULL CHECK (length(trim(title)) > 0),
+    status VARCHAR(16) NOT NULL DEFAULT 'open' CHECK (status IN ('open', 'resolved')),
+    created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+);

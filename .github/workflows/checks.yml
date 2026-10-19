@@ -1,0 +1,31 @@
+name: checks
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  unit-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m unittest discover -s tests -v
+  compose-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Configure ephemeral lab password
+        run: python -c "import secrets,pathlib; pathlib.Path('.env').write_text('DB_PASSWORD='+secrets.token_hex(24)+'\n')"
+      - run: docker compose config --quiet
+      - run: docker compose up --build -d --wait --wait-timeout 120
+      - run: python smoke_test.py
+      - name: Record logs
+        if: failure()
+        run: docker compose logs --tail=80
+      - name: Clean up ephemeral CI database
+        if: always()
+        run: docker compose down -v
