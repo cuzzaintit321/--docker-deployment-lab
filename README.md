@@ -2,7 +2,7 @@
 
 ![--docker-deployment-lab project banner](docs/project-banner.webp)
 
-A three-service operations checklist application: Nginx → Python API → PostgreSQL. Create a check, list the latest 100 records, and resolve an item. Built as a new learning and portfolio project for Jason Edwards; it has not been deployed on his home server.
+A three-service operations checklist application: Nginx → Python API → PostgreSQL. Create a check, list the latest 100 records, and resolve an item. 
 
 ## Start
 
